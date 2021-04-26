@@ -28,6 +28,12 @@ def main():
     DOWNSTREAM_IP = env['DOWNSTREAM']['IP']
     DOWNSTREAM_PORT = env['DOWNSTREAM']['PORT']
 
+    print("ENV IS")
+    print(UPSTREAM_HOST)
+    print(UPSTREAM_PORT)
+    print(DOWNSTREAM_IP)
+    print(DOWNSTREAM_PORT)
+
     MAX_READ = 66560
 
     def handle_downstream(downstream_sock):

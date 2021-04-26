@@ -1,0 +1,1 @@
+web: /home/vcap/app/bin/paas-wrapper.sh python -m postgresql_proxy
