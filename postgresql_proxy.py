@@ -8,18 +8,6 @@ import socket
 import struct
 
 
-class ConnectionClosed(Exception):
-    pass
-
-
-class ProtocolError(Exception):
-    pass
-
-
-class AuthenticationError(Exception):
-    pass
-
-
 def main():
     env = normalise_environment(os.environ)
     UPSTREAM_HOST = env['UPSTREAM']['HOST']
