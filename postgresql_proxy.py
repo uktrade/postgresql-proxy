@@ -1,27 +1,16 @@
 from gevent import monkey
 monkey.patch_all()
 
-import itertools
 import os
 import gevent
 import socket
-import struct
 
 
 def main():
-    env = normalise_environment(os.environ)
-    UPSTREAM_HOST = env['UPSTREAM']['HOST']
-    UPSTREAM_PORT = env['UPSTREAM']['PORT']
-
-    DOWNSTREAM_IP = env['DOWNSTREAM']['IP']
-    DOWNSTREAM_PORT = env['DOWNSTREAM']['PORT']
-
-    print("ENV IS")
-    print(UPSTREAM_HOST)
-    print(UPSTREAM_PORT)
-    print(DOWNSTREAM_IP)
-    print(DOWNSTREAM_PORT)
-
+    UPSTREAM_HOST = os.environ['UPSTREAM_HOST']
+    UPSTREAM_PORT = os.environ['UPSTREAM_PORT']
+    DOWNSTREAM_IP = os.environ['DOWNSTREAM_IP']
+    DOWNSTREAM_PORT = os.environ['DOWNSTREAM_PORT']
     MAX_READ = 66560
 
     def handle_downstream(downstream_sock):
@@ -89,74 +78,6 @@ def main():
     while True:
         downstream_sock, _ = sock.accept()
         gevent.spawn(handle_downstream, downstream_sock)
-
-
-def normalise_environment(key_values):
-    separator = '__'
-
-    def get_first_component(key):
-        return key.split(separator)[0]
-
-    def get_later_components(key):
-        return separator.join(key.split(separator)[1:])
-
-    without_more_components = {
-        key: value
-        for key, value in key_values.items()
-        if not get_later_components(key)
-    }
-
-    with_more_components = {
-        key: value
-        for key, value in key_values.items()
-        if get_later_components(key)
-    }
-
-    def grouped_by_first_component(items):
-        def by_first_component(item):
-            return get_first_component(item[0])
-
-        return itertools.groupby(
-            sorted(items, key=by_first_component),
-            by_first_component,
-        )
-
-    def items_with_first_component(items, first_component):
-        return {
-            get_later_components(key): value
-            for key, value in items
-            if get_first_component(key) == first_component
-        }
-
-    nested_structured_dict = {
-        **without_more_components, **{
-            first_component: normalise_environment(
-                items_with_first_component(items, first_component))
-            for first_component, items in grouped_by_first_component(with_more_components.items())
-        }}
-
-    def all_keys_are_ints():
-        def is_int(string):
-            try:
-                int(string)
-                return True
-            except ValueError:
-                return False
-
-        return all([is_int(key) for key, value in nested_structured_dict.items()])
-
-    def list_sorted_by_int_key():
-        return [
-            value
-            for key, value in sorted(
-                nested_structured_dict.items(),
-                key=lambda key_value: int(key_value[0])
-            )
-        ]
-
-    return \
-        list_sorted_by_int_key() if all_keys_are_ints() else \
-        nested_structured_dict
 
 
 if __name__ == '__main__':
