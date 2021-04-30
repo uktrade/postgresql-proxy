@@ -1,7 +1,6 @@
 ---
 applications:
-- name: postgresql-proxy
-  buildpacks:
+- buildpacks:
     - python_buildpack
   memory: 256M
   disk_quota: 256M
