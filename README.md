@@ -11,6 +11,8 @@
 
 - `cf bind-service postgresql-proxy-for-<client> postgresql-proxy-db-for-<client>`
 
+- `cf restage postgresql-proxy-for-<client>`
+
 - `cf map-route postgresql-proxy-for-<client> apps.internal --hostname data-workspace-datasets-for-<client>`
 
 - `cf delete-route london.cloudapps.digital --hostname postgresql-proxy-for-<client>`
@@ -21,11 +23,11 @@
 
 - `cf bind-service data-flow-<env> postgresql-proxy-db-for-<client>`
 
-- Run `cf env` and copy uri for the client's database in `VCAP_SERVICES['postgres']`
+- Run `cf env data-flow-<env>` and copy uri for the client's database in `VCAP_SERVICES['postgres']`
 
-- `cf set-env data-flow-<env> AIRFLOW_CONN_<client> <uri>`
+- Set `AIRFLOW_CONN_<client>` in vault with the uri value copied in the previous step
 
-- `cf restage data-flow-<env>`
+- Deploy app via jenkins
 
 ### Configuring client database
 
