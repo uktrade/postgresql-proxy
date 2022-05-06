@@ -41,10 +41,15 @@ CREATE SCHEMA dataflow
 
 CREATE TABLE dataflow.metadata (
     id integer NOT NULL,
-    table_schema text NOT NULL,
-    table_name text NOT NULL,
+    table_schema text,
+    table_name text,
     source_data_modified_utc timestamp without time zone,
-    dataflow_swapped_tables_utc timestamp without time zone NOT NULL
+    dataflow_swapped_tables_utc timestamp without time zone,
+    table_structure jsonb,
+    data_type integer NOT NULL,
+    data_hash_v1 bytea,
+    primary_keys text[],
+    data_ids text[]
 );
 
 CREATE SEQUENCE dataflow.metadata_id_seq
