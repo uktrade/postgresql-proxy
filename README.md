@@ -88,7 +88,7 @@ ALTER TABLE ONLY dataflow.table_dependencies ALTER COLUMN id SET DEFAULT nextval
 
 ALTER TABLE ONLY dataflow.table_dependencies ADD CONSTRAINT table_dependencies_pkey PRIMARY KEY (id);
 ```
-- Run SQL statements found at https://github.com/uktrade/data-flow/blob/d116760084b87930452ffd3fb4712c2d325c0935/alembic/versions/e806e434d43a_rollback_save_and_drop_dependencies_.py#L22-L130
+- Run SQL statements found at https://github.com/uktrade/data-flow/blob/3cc363878a1657af4d4322615ffc95f1ee550713/alembic/versions/57de8d41a62d_fix_save_and_restore_deps_sproc.py#L22-L133
 
 ### Setting up networking between proxy and client space  
 
